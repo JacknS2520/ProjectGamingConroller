@@ -1,4 +1,5 @@
 // Arduino gaming controller example
+// This editor does not work and a copy of this code is in the Arduino Cloud edit and upload that version a copy is here are well.
 
 const int buttonPin    = 2;
 const int joystickXPin = A0;

@@ -6,9 +6,3 @@ if (startButton) {
     alert('Get Started clicked! Customize this action in script.js.');
   });
 }
-
-if (learnButton) {
-  learnButton.addEventListener('click', () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  });
-}
