@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found</title>
+  <style>
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #f7f7f7; color: #111; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+    .page { max-width: 32rem; width: 100%; text-align: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 70px rgba(15, 23, 42, 0.08); }
+    a { color: #2563eb; text-decoration: none; font-weight: 700; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Looking for a page?</h1>
+    <p>If this is an extensionless URL, we are trying to load the matching <code>.html</code> file for you.</p>
+    <p id="message">Attempting to resolve the page...</p>
+    <p><a href="/">Go to the homepage</a></p>
+  </div>
+  <script>
+    const path = window.location.pathname;
+    const candidateHtml = path.replace(/\/$/, '') + '.html';
+    const candidateIndex = path.replace(/\/$/, '') + '/index.html';
+
+    function tryFetch(url) {
+      return fetch(url, { method: 'HEAD' })
+        .then(response => response.ok ? url : null)
+        .catch(() => null);
+    }
+
+    async function resolve() {
+      const messageEl = document.getElementById('message');
+      messageEl.textContent = `Checking ${candidateHtml}...`;
+
+      const htmlUrl = await tryFetch(candidateHtml);
+      if (htmlUrl) {
+        window.location.replace(htmlUrl);
+        return;
+      }
+
+      messageEl.textContent = `Checking ${candidateIndex}...`;
+      const indexUrl = await tryFetch(candidateIndex);
+      if (indexUrl) {
+        window.location.replace(indexUrl);
+        return;
+      }
+
+      messageEl.textContent = 'No matching file was found. Please use the homepage link above.';
+    }
+
+    if (path !== '/' && path !== '/index.html') {
+      resolve();
+    } else {
+      document.getElementById('message').textContent = 'This page was not found.';
+    }
+  </script>
+</body>
+</html>
